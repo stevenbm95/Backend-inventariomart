@@ -7,7 +7,7 @@ export class OrderController {
 
   getOrders = async (req, res, next) => {
     try {
-      const orders = await this.orderService.getAll();
+      const orders = await this.orderService.getAllOrders();
       return res.status(200).json(orders);
     } catch (error) {
       next(error);
@@ -40,4 +40,24 @@ export class OrderController {
       next(error);
     }
   }
+
+  updateOrder = async (req, res, next) => {
+    try {
+      const order = await this.orderService.update(req.params.id, req.body);
+      return res.status(200).json({ message: "order updated successfully", order });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  getOrdersByStatus = async (req, res, next) => {
+    try {
+      const orders = await this.orderService.getOrdersByStatus(req.params.status);
+      return res.status(200).json(orders);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
 }

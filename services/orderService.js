@@ -56,4 +56,12 @@ export class OrderService extends BaseService {
   async getUserOrders(userId) {
     return await this.orderRepository.getOrdersByUser(userId); 
   }
+
+  async getAllOrders(){
+    return await this.orderRepository.getAllOrders();
+  }
+
+  async getOrdersByStatus(status) {
+    return await this.orderRepository.getOrdersByStatus(status);
+  }
 }

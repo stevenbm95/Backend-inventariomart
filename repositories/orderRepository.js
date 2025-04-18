@@ -11,19 +11,19 @@ export class OrderRepository extends BaseRepository {
       data: {
         userId: orderData.userId,
         total: orderData.total,
-        status: orderData.status || 'pending',
+        status: orderData.status || "pending",
         orderItems: {
-          create: orderData.items.map(item => ({
+          create: orderData.items.map((item) => ({
             drinkId: item.drinkId,
             quantity: item.quantity,
-            price: item.price
-          }))
+            price: item.price,
+          })),
         },
-        totalAmount: orderData.totalAmount
+        totalAmount: orderData.totalAmount,
       },
       include: {
-        orderItems: true
-      }
+        orderItems: true,
+      },
     });
   }
 
@@ -33,11 +33,49 @@ export class OrderRepository extends BaseRepository {
       include: {
         items: {
           include: {
-            drink: true
-          }
-        }
-      }
+            drink: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getOrdersByStatus(status) {
+    return await prisma.order.findMany({
+      where: { status },
+      include: {
+        orderItems: {
+          include: {
+            drink: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getAllOrders() {
+    return await prisma.order.findMany({
+      include: {
+        orderItems: {
+          include: {
+            drink: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
   }
 }
-

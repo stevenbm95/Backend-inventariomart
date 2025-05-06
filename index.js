@@ -30,6 +30,5 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-export default (req, res) => {
-  app(req, res); // Esta es la forma correcta de invocar Express en Vercel.
-};
+export default app;
+

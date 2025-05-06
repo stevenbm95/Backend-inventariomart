@@ -7,7 +7,7 @@ const app = express();
 
 const corsOptions = {
   origin: '*', // El frontend en local
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type'],
 };
 

@@ -6,10 +6,10 @@ import { InventoryController } from "../controllers/inventoryController.js";
 const router = Router();
 const inventoryController = new InventoryController();
 
-router.post("/create-inventory", validateRequest(inventoryChangeSchema), inventoryController.createChange);
-router.get("/get-inventorys", inventoryController.getChanges);
-router.get("/get-inventory/:id", validateId(idSchema), inventoryController.getChangeById)
-router.put("/update-inventory/:id", validateId(idSchema), validateRequest(inventoryChangeSchema), inventoryController.updateChange)
-router.delete("/delete-inventory/:id", validateId(idSchema), inventoryController.deleteChange)
+router.post("/", validateRequest(inventoryChangeSchema), inventoryController.createChange);
+router.get("/", inventoryController.getChanges);
+router.get("/:id", validateId(idSchema), inventoryController.getChangeById)
+router.put("/:id", validateId(idSchema), validateRequest(inventoryChangeSchema), inventoryController.updateChange)
+router.delete("/:id", validateId(idSchema), inventoryController.deleteChange)
 
 export default router;

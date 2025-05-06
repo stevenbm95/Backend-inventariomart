@@ -2,7 +2,7 @@ import { Router } from "express";
 import rolsRoutes from "./rolsRoutes.js";
 import usersRoutes from "./usersRoutes.js";
 import authRoutes from "./authRoutes.js";
-import drinksRoutes from "./dirnksRoutes.js";
+import drinksRoutes from "./drinksRoutes.js";
 // import consumptionsRoutes from "./consumptionsRoutes.js";
 import inventoryRoutes from "./inventoryRoutes.js";
 import orderRoutes from "./orderRoutes.js"

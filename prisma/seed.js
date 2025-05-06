@@ -18,7 +18,7 @@ async function main() {
     where: { email: 'user@example.com' },
     update: {},
     create: {
-      name: 'Usuario',
+      name: 'Brian',
       email: 'user@example.com',
       password: 'user123',
       role: 'USER'
@@ -28,16 +28,21 @@ async function main() {
   // Crear bebidas
   const drinks = await prisma.drink.createMany({
     data: [
-      { name: 'Aguila Light', unit: 'botella', quantity: 50, purchasePrice: 1800, salePrice: 2500 },
-      { name: 'Poker', unit: 'botella', quantity: 30, purchasePrice: 1700, salePrice: 2400 },
-      { name: 'Budweiser', unit: 'botella', quantity: 20, purchasePrice: 2000, salePrice: 2800 },
-      { name: 'Stella', unit: 'botella', quantity: 40, purchasePrice: 1500, salePrice: 2200 },
-      { name: 'Aguila Light', unit: 'Laton', quantity: 50, purchasePrice: 1800, salePrice: 2500 },
+      { name: 'aguila light', unit: 'botella', stock: 50, purchasePrice: 1800, salePrice: 2500 },
+      { name: 'aguila light', unit: 'botellon', stock: 50, purchasePrice: 2500, salePrice: 3000 },
+      { name: 'aguila light', unit: 'lata', stock: 50, purchasePrice: 1800, salePrice: 2500 },
+      { name: 'aguila light', unit: 'laton', stock: 50, purchasePrice: 1800, salePrice: 2500 },
+      { name: 'poker', unit: 'botella', stock: 30, purchasePrice: 1700, salePrice: 2400 },
+      { name: 'poker', unit: 'botellon', stock: 30, purchasePrice: 1700, salePrice: 2400 },
+      { name: 'poker', unit: 'lata', stock: 30, purchasePrice: 1700, salePrice: 2400 },
+      { name: 'poker', unit: 'laton', stock: 30, purchasePrice: 1700, salePrice: 2400 },
+      { name: 'budweiser', unit: 'lata', stock: 20, purchasePrice: 2000, salePrice: 2800 },
+      { name: 'stella', unit: 'botella', stock: 40, purchasePrice: 1500, salePrice: 2200 },
     ]
   });
 
   // Crear un cambio de inventario
-  const aguila = await prisma.drink.findFirst({ where: { name: 'Aguila Light' } });
+  const aguila = await prisma.drink.findFirst({ where: { name: 'aguila light' } });
 
   await prisma.inventoryChange.create({
     data: {

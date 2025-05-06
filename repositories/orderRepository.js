@@ -78,4 +78,60 @@ export class OrderRepository extends BaseRepository {
       },
     });
   }
+
+  async getOrderWithItems(orderId) {
+    return await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        orderItems: {
+          include: { drink: true },
+        },
+      },
+    });
+  }
+
+  async updateOrderStatus(orderId, status, tx = prisma) {
+    return await tx.order.update({
+      where: { id: orderId },
+      data: { status },
+    });
+  }
+
+  async incrementDrinkStock(drinkId, quantity, tx = prisma) {
+    return await tx.drink.update({
+      where: { id: drinkId },
+      data: {
+        stock: {
+          increment: quantity,
+        },
+      },
+    });
+  }
+
+  // Actualizar la cantidad de un ítem en una orden
+async updateOrderItemQuantity(orderItemId, newQuantity, tx = prisma) {
+  return await tx.orderItem.update({
+    where: { id: orderItemId },
+    data: { quantity: newQuantity },
+  });
+}
+
+// Eliminar un ítem de una orden
+async deleteOrderItem(orderItemId, tx = prisma) {
+  return await tx.orderItem.delete({
+    where: { id: orderItemId },
+  });
+}
+
+// Obtener un ítem de orden por ID con su bebida y orden asociada
+async getOrderItemById(orderItemId, tx = prisma) {
+  return await tx.orderItem.findUnique({
+    where: { id: orderItemId },
+    include: {
+      drink: true,
+      order: true,
+    },
+  });
+}
+
 }

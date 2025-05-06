@@ -8,8 +8,5 @@
         "maxLambdaSize": "50mb"
       }
     }
-  ],
-  "scripts": {
-    "vercel-build": "prisma generate"
-  }
+  ]
 }

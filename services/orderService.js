@@ -15,7 +15,9 @@ export class OrderService extends BaseService {
     });
 
     if (!drink || drink.stock < quantity) {
-      throw new Error(`No hay suficiente cantidad para la bebida con ID ${drinkId}`);
+      throw new Error(
+        `No hay suficiente cantidad para la bebida con ID ${drinkId}`
+      );
     }
 
     await tx.drink.update({
@@ -33,7 +35,11 @@ export class OrderService extends BaseService {
     return await prisma.$transaction(async (temporalTransaction) => {
       // 1. Descontar cantidad de bebidas de manera transaccional
       for (const item of orderData.items) {
-        await this.decrementDrinkStock(item.drinkId, item.quantity, temporalTransaction);
+        await this.decrementDrinkStock(
+          item.drinkId,
+          item.quantity,
+          temporalTransaction
+        );
       }
 
       // 2. Crear la orden con sus items
@@ -41,9 +47,9 @@ export class OrderService extends BaseService {
         data: {
           userId: orderData.userId,
           totalAmount: orderData.totalAmount,
-          status: orderData.status || 'pending',
+          status: orderData.status || "pending",
           orderItems: {
-            create: orderData.items.map(item => ({
+            create: orderData.items.map((item) => ({
               drinkId: item.drinkId,
               quantity: item.quantity,
               price: item.price,
@@ -61,7 +67,7 @@ export class OrderService extends BaseService {
 
   // Obtener las órdenes de un usuario
   async getUserOrders(userId) {
-    return await this.orderRepository.getOrdersByUser(userId); 
+    return await this.orderRepository.getOrdersByUser(userId);
   }
 
   // Obtener todas las órdenes
@@ -102,7 +108,7 @@ export class OrderService extends BaseService {
       await temporalTransaction.order.update({
         where: { id: orderId },
         data: {
-          status: 'cancelled',
+          status: "cancelled",
         },
       });
 
@@ -119,26 +125,30 @@ export class OrderService extends BaseService {
           order: true,
         },
       });
-  
-      if (!orderItem) throw new Error("Item no encontrado");
-      console.log(orderItem.order.status
 
+      if (!orderItem) {
+        console.error("Item no encontrado en la base de datos");
+        throw new Error("Item no encontrado");
+      }
 
-        
-      )
-      if (orderItem.order.status !== 'pending') {
+      if (!orderItem.order) {
+        console.error("Order no está asociado con el item");
+        throw new Error("El item no tiene orden asociada");
+      }
+
+      if (orderItem.order.status !== "pending") {
         throw new Error("Solo se pueden editar órdenes pendientes");
       }
-  
+
       const diff = newQuantity - orderItem.quantity;
-  
+
       // Si hay diferencia, ajustamos el stock
       if (diff > 0) {
         // Aumentó la cantidad → debemos verificar si hay suficiente stock
         if (orderItem.drink.stock < diff) {
           throw new Error("No hay suficiente stock para esta bebida");
         }
-  
+
         await tx.drink.update({
           where: { id: orderItem.drinkId },
           data: {
@@ -158,7 +168,7 @@ export class OrderService extends BaseService {
           },
         });
       }
-  
+
       // Actualizamos el item con la nueva cantidad
       const updatedItem = await tx.orderItem.update({
         where: { id: orderItemId },
@@ -166,7 +176,7 @@ export class OrderService extends BaseService {
           quantity: newQuantity,
         },
       });
-  
+
       return updatedItem;
     });
   }
@@ -177,12 +187,12 @@ export class OrderService extends BaseService {
         where: { id: orderItemId },
         include: { drink: true, order: true },
       });
-  
+
       if (!item) throw new Error("Item no encontrado");
-      if (item.order.status !== 'pending') {
+      if (item.order.status !== "pending") {
         throw new Error("Solo se pueden eliminar ítems de órdenes pendientes");
       }
-  
+
       // Devolver stock
       await tx.drink.update({
         where: { id: item.drinkId },
@@ -192,14 +202,13 @@ export class OrderService extends BaseService {
           },
         },
       });
-  
+
       // Eliminar el ítem
       await tx.orderItem.delete({
         where: { id: orderItemId },
       });
-  
+
       return { success: true };
     });
   }
-  
 }

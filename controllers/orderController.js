@@ -77,39 +77,6 @@ export class OrderController {
     }
   }
 
-  async updateOrderItem(req, res, next) {
-    try {
-      const orderItemId = Number(req.params.id);
-      const { quantity } = req.body;
-      
-      // Verificar que la cantidad sea válida
-      if (!quantity || quantity < 1) {
-        return res.status(400).json({ error: "Cantidad inválida" });
-      }
-  
-      // Actualizar el item y obtener la orden completa actualizada
-      const updatedOrder = await this.orderService.updateOrderItemQuantity(
-        orderItemId, 
-        quantity
-      );
-      
-      res.json(updatedOrder);
-    } catch (error) {
-      next(error);
-    }
-  }
-  
-  // DELETE /order-item/:id
-  async deleteOrderItem(req, res, next) {
-    try {
-      const orderItemId = Number(req.params.id);
-      await orderService.deleteOrderItem(orderItemId);
-      res.status(204).end();
-    } catch (error) {
-      next(error);
-    }
-  }
-
   updateOrderItem = async (req, res, next) => {
     try {
       const orderItemId = Number(req.params.id);
@@ -126,12 +93,13 @@ export class OrderController {
         quantity
       );
       
-      res.json(updatedOrder);
+      res.json({updatedOrder, message: "Cantidad actualizada"});
     } catch (error) {
       next(error);
     }
   }
   
+  // DELETE /order-item/:id
   deleteOrderItem = async (req, res, next) => {
     try {
       const orderItemId = Number(req.params.id);
@@ -141,8 +109,4 @@ export class OrderController {
       next(error);
     }
   }
-
-
-
-
 }
